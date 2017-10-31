@@ -1,3 +1,15 @@
 ext {
+    //Support libraries
     supportLibVersion = "27.0.0"
+
+    //Dagger
+    daggerVersion = "2.12"
+
+    //Architecture components
+    archComponentsVersion = '1.0.0-rc1'
+    constraintLayoutVersion = "1.0.2"
+
+    //Rx
+    rxJavaVersion = '2.0.8'
+    rxAndroidVersion = '2.0.1'
 }
