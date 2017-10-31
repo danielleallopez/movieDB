@@ -1,13 +1,40 @@
 package com.dleal.moviedb.ui.splash
 
-import android.support.v7.app.AppCompatActivity
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import com.dleal.moviedb.R
+import com.dleal.moviedb.ui.base.BaseActivity
+import com.dleal.moviedb.ui.base.ViewModelFactory
+import javax.inject.Inject
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity<SplashViewModel>() {
+
+    private lateinit var splashViewModel: SplashViewModel
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+
+        splashViewModel = injectViewModel()
+
+        observeViewModel()
+
+        splashViewModel.start()
     }
+
+    fun observeViewModel() {
+        splashViewModel.navigationEvents.observe(this, Observer {
+            it?.let {
+                TODO("Implement navigation to next screen")
+            }
+        })
+    }
+
+    override fun injectViewModel(): SplashViewModel =
+            ViewModelProviders.of(this, viewModelFactory).get(SplashViewModel::class.java)
+
+    override fun getLayoutId(): Int = R.layout.activity_splash
 }
