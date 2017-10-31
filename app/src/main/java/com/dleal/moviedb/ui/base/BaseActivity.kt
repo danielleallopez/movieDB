@@ -1,36 +1,24 @@
 package com.dleal.moviedb.ui.base
 
 import android.os.Bundle
+import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
+import dagger.android.AndroidInjection
 
 /**
  * Created by Daniel Leal on 31/10/17.
  */
-abstract class BaseActivity : AppCompatActivity(), View {
+abstract class BaseActivity<out T : BaseViewModel>: AppCompatActivity() {
 
-    lateinit var presenter: BasePresenter<View>
+    @LayoutRes
+    protected abstract fun getLayoutId(): Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
-        presenter.attachView(this)
+        setContentView(getLayoutId())
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        presenter.start()
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        presenter.stop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        presenter.detachView()
-    }
+    protected abstract fun injectViewModel(): T
 }
