@@ -5,9 +5,11 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 apply from: "dependencies.gradle"
+apply from: "private.gradle"
 
 android {
     compileSdkVersion 27
+
     defaultConfig {
         applicationId "com.dleal.moviedb"
         minSdkVersion 16
@@ -16,10 +18,38 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
-        release {
+        debug {
+            debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "boolean", "SHOW_HTTP_LOGS", "true"
+        }
+
+        release {
+            debuggable false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "boolean", "SHOW_HTTP_LOGS", "false"
+        }
+    }
+
+    flavorDimensions("environment")
+
+    productFlavors {
+        dev {
+            dimension "environment"
+            versionName defaultConfig.versionName + "-dev"
+            applicationId defaultConfig.applicationId + ".dev"
+            buildConfigField 'String', 'API_KEY', "${API_KEY_DEV}"
+            buildConfigField 'String', 'BASE_URL', '"https://api.themoviedb.org/3/"'
+        }
+
+        prod {
+            dimension "environment"
+            buildConfigField 'String', 'API_KEY', "${API_KEY_PROD}"
+            buildConfigField 'String', 'BASE_URL', '"https://api.themoviedb.org/3/"'
         }
     }
 }
@@ -52,6 +82,17 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
     implementation "io.reactivex.rxjava2:rxkotlin:2.1.0"
     implementation "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}"
+
+    //OkHttp
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+
+    //Retrofit
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion") {
+        exclude module: 'okhttp'
+    }
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
 
     //Test
     testImplementation 'junit:junit:4.12'
