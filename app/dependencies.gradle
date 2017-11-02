@@ -12,4 +12,8 @@ ext {
     //Rx
     rxJavaVersion = '2.0.8'
     rxAndroidVersion = '2.0.1'
+
+    //API
+    retrofitVersion = "2.3.0"
+    okhttpVersion = "3.9.0"
 }
