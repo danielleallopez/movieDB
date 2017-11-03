@@ -1,6 +1,5 @@
 package com.dleal.moviedb.di
 
-import com.dleal.moviedb.di.splash.SplashModule
 import com.dleal.moviedb.ui.splash.SplashActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -11,6 +10,6 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class ActivityBindingModule {
 
-    @ContributesAndroidInjector(modules = arrayOf(SplashModule::class))
+    @ContributesAndroidInjector
     abstract fun bindSplashActivity(): SplashActivity
 }

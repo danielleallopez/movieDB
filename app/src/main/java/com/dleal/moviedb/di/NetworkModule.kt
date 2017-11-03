@@ -1,6 +1,7 @@
 package com.dleal.moviedb.di
 
 import com.dleal.moviedb.BuildConfig
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import okhttp3.Interceptor
@@ -83,6 +84,12 @@ class NetworkModule {
                 val request = requestBuilder.build()
                 chain.proceed(request)
             }
+
+    @Provides
+    fun provideGson(): Gson = Gson()
+
+    @Provides
+    fun provideGsonConverterFactory(gson: Gson): GsonConverterFactory = GsonConverterFactory.create(gson)
 }
 
 const val REQUEST_API_KEY = "api_key"
