@@ -16,4 +16,7 @@ ext {
     //API
     retrofitVersion = "2.3.0"
     okhttpVersion = "3.9.0"
+
+    //Testing
+    mockitoVersion = "2.10.0"
 }
