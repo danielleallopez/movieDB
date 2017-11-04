@@ -5,15 +5,14 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import com.dleal.moviedb.R
 import com.dleal.moviedb.ui.base.BaseActivity
+import com.dleal.moviedb.ui.latestMovies.LatestMoviesActivity
 
 class SplashActivity : BaseActivity<SplashViewModel>() {
 
-    private lateinit var splashViewModel: SplashViewModel
+    private val splashViewModel by lazy { injectViewModel() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        splashViewModel = injectViewModel()
 
         observeViewModel()
 
@@ -28,7 +27,8 @@ class SplashActivity : BaseActivity<SplashViewModel>() {
     private fun observeViewModel() {
         splashViewModel.navigationEvents.observe(this, Observer {
             it?.let {
-                TODO("Implement navigation to next screen")
+                LatestMoviesActivity.start(this)
+                finish()
             }
         })
     }

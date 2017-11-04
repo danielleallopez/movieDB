@@ -19,4 +19,7 @@ ext {
 
     //Testing
     mockitoVersion = "2.10.0"
+
+    //Glide
+    glideVersion = "4.3.0"
 }
