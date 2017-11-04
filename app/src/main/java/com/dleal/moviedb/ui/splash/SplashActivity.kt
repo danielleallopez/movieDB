@@ -22,10 +22,15 @@ class SplashActivity : BaseActivity<SplashViewModel>() {
 
         observeViewModel()
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+
         splashViewModel.start()
     }
 
-    fun observeViewModel() {
+    private fun observeViewModel() {
         splashViewModel.navigationEvents.observe(this, Observer {
             it?.let {
                 TODO("Implement navigation to next screen")

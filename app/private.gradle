@@ -1,0 +1,4 @@
+ext {
+    API_KEY_DEV = '"<DEBUG API KEY>"'
+    API_KEY_PROD = '"<PRODUCTION API KEY>"'
+}
