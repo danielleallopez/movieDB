@@ -5,15 +5,10 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import com.dleal.moviedb.R
 import com.dleal.moviedb.ui.base.BaseActivity
-import com.dleal.moviedb.ui.base.ViewModelFactory
-import javax.inject.Inject
 
 class SplashActivity : BaseActivity<SplashViewModel>() {
 
     private lateinit var splashViewModel: SplashViewModel
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
