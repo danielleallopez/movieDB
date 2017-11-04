@@ -1,4 +1,4 @@
 ext {
-    API_KEY_DEV = '"<DEBUG API KEY>"'
+    API_KEY_DEV = '"2fa7bc685b4d0ba3b7dcee98b23b3cfa"'
     API_KEY_PROD = '"<PRODUCTION API KEY>"'
 }
