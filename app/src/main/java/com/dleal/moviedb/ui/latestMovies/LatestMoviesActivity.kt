@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import com.dleal.moviedb.R
 import com.dleal.moviedb.ui.base.BaseActivity
 import com.dleal.moviedb.ui.base.CustomItemSeparator
@@ -106,6 +107,8 @@ class LatestMoviesActivity : BaseActivity<LatestMoviesViewModel>(), Logger {
             adapter = listAdapter
             layoutManager = linearLayoutManager
             addItemDecoration(CustomItemSeparator(context, R.dimen.listItemSpace))
+
+            addOnScrollListener(recyclerViewOnScrollListener)
         }
 
         swipeRefreshLayout.setOnRefreshListener({ latestMoviesViewModel.refreshList() })
@@ -158,6 +161,18 @@ class LatestMoviesActivity : BaseActivity<LatestMoviesViewModel>(), Logger {
             it.set(Calendar.DAY_OF_MONTH, dayOfMonth)
         }
         latestMoviesViewModel.onFilterSelected(calendar.time)
+    }
+
+    private val recyclerViewOnScrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+
+            val totalItemCount = linearLayoutManager.itemCount
+            val visibleItemCount = linearLayoutManager.childCount
+            val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
+
+            latestMoviesViewModel.onScrollToBottom(totalItemCount, visibleItemCount, firstVisibleItemPosition)
+        }
     }
 }
 

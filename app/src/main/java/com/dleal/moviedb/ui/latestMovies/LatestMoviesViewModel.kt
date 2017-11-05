@@ -27,8 +27,11 @@ class LatestMoviesViewModel(
     val errorEvents: SingleLiveEvent<String> = SingleLiveEvent()
 
     private var latestMoviesUiModel: MutableLiveData<LatestMoviesUiModel> = MutableLiveData()
-    private lateinit var moviesCollection: MovieCollection
+    private var moviesCollection: MovieCollection = MovieCollection()
     private var filterDate: Date? = null
+    private var currentPage: Int = 1
+
+    private var isLoadingMore = false
 
     override fun start() {
         loadPage()
@@ -36,11 +39,12 @@ class LatestMoviesViewModel(
 
     fun creationLatestMoviesEvents(): LiveData<LatestMoviesUiModel> = latestMoviesUiModel.apply {
         if (this.value == null) {
-            loadPage()
+            loadPage(1)
         }
     }
 
     fun refreshList() {
+        moviesCollection = MovieCollection()
         loadPage(1)
     }
 
@@ -56,23 +60,28 @@ class LatestMoviesViewModel(
     }
 
     private fun loadPage(page: Int = 1) {
+        logError("Loading page $page")
+        currentPage = page
         addDisposable(
                 getLatestMoviesUseCase.fetchLatestMovies(page)
                         .compose(rxTransformer.applyIoScheduler())
                         .map {
-                            moviesCollection = it
+                            moviesCollection = it.copy(
+                                    movieList = moviesCollection.movieList + it.movieList
+                            )
                             LatestMoviesUiModel(
-                                    data = it.movieList.filter { listFilter(it.releaseDate) },
+                                    data = moviesCollection.movieList.filter { listFilter(it.releaseDate) },
                                     currentFilter = getDateRangeMessage(),
                                     canClearFilter = filterDate != null)
                         }
                         .toFlowable()
                         .startWith(LatestMoviesUiModel(mainLoading = true))
                         .subscribe({
-                            logDebug(it.toString())
                             latestMoviesUiModel.value = it
+                            isLoadingMore = false
                         }, {
                             errorEvents.value = it.message
+                            isLoadingMore = false
                         }))
     }
 
@@ -90,6 +99,17 @@ class LatestMoviesViewModel(
         latestMoviesUiModel.value = LatestMoviesUiModel(
                 data = moviesCollection.movieList,
                 currentFilter = getDateRangeMessage())
+    }
+
+    fun onScrollToBottom(totalItemCount: Int, visibleItemCount: Int, firstVisibleItemPosition: Int) {
+        val totalPageCount = moviesCollection.movieCollectionPage?.totalPages ?: 1
+        if (!isLoadingMore
+                && visibleItemCount + firstVisibleItemPosition >= totalItemCount
+                && totalPageCount > 0
+                && currentPage < totalPageCount - 1) {
+            isLoadingMore = true
+            loadNextPage()
+        }
     }
 
     private val listFilter = { releaseDate: Date ->
@@ -110,5 +130,10 @@ class LatestMoviesViewModel(
             val maxDate = it.maxDate
             "Movies from ${dateToString(minDate)} to ${dateToString(maxDate)}"
         } ?: "-"
+    }
+
+    private fun loadNextPage() {
+        latestMoviesUiModel.value = LatestMoviesUiModel(pageLoading = true)
+        loadPage(currentPage + 1)
     }
 }
