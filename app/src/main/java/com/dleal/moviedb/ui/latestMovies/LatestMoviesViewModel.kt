@@ -81,6 +81,7 @@ class LatestMoviesViewModel(
                             isLoadingMore = false
                         }, {
                             errorEvents.value = it.message
+                            latestMoviesUiModel.value = LatestMoviesUiModel(emptyList())
                             isLoadingMore = false
                         }))
     }
