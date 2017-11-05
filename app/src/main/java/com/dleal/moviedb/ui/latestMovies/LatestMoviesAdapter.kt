@@ -66,7 +66,7 @@ class MovieViewHolder(itemView: View,
 
     private fun bindPopularity(txtPopularity: TextView, movie: MovieModel) {
         movie.popularity?.let {
-            val popularityText = "Popularity: $it"
+            val popularityText = "Popularity: ${"%.2f".format(it)}"
             txtPopularity.text = popularityText
         } ?: txtPopularity.hide()
     }

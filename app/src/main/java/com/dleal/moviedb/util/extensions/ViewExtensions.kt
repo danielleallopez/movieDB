@@ -43,3 +43,11 @@ fun View.hide() {
 }
 
 fun Activity.toast(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+fun View.enable() {
+    this.isEnabled = true
+}
+
+fun View.disable() {
+    this.isEnabled = false
+}
