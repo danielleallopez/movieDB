@@ -23,14 +23,18 @@ class LatestMoviesViewModel(
     private var latestMoviesUiModel: MutableLiveData<LatestMoviesUiModel> = MutableLiveData()
     private lateinit var moviesCollection: MovieCollection
 
+    override fun start() {
+        loadPage()
+    }
+
     fun creationLatestMoviesEvents(): LiveData<LatestMoviesUiModel> = latestMoviesUiModel.apply {
         if (this.value == null) {
             loadPage()
         }
     }
 
-    override fun start() {
-        loadPage()
+    fun refreshList(){
+        loadPage(1)
     }
 
     private fun loadPage(page: Int = 1) {

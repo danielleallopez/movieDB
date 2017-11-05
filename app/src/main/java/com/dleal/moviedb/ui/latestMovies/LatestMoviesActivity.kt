@@ -5,6 +5,8 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import com.dleal.moviedb.R
 import com.dleal.moviedb.domain.movies.MovieModel
@@ -15,11 +17,13 @@ import com.dleal.moviedb.util.extensions.show
 import com.dleal.moviedb.util.extensions.toast
 import kotlinx.android.synthetic.main.activity_latest_movies.*
 
+
 class LatestMoviesActivity : BaseActivity<LatestMoviesViewModel>() {
 
     private val latestMoviesViewModel by lazy { injectViewModel() }
 
     private val listAdapter = LatestMoviesAdapter { navigate(it) }
+    private val linearLayoutManager = LinearLayoutManager(this)
 
     companion object {
         @JvmStatic
@@ -48,17 +52,31 @@ class LatestMoviesActivity : BaseActivity<LatestMoviesViewModel>() {
                             progressMain.hide()
                             progressPage.hide()
                             listMovies.show()
+                            swipeRefreshLayout.isRefreshing = false
                             listAdapter.movieList = data
                         }
                         else -> {
                             progressMain.hide()
                             progressPage.hide()
+                            swipeRefreshLayout.isRefreshing = false
                             txtEmptyCase.show()
                         }
                     }
                 }
             }
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        outState?.putParcelable(KEY_RECYCLER_VIEW_POSITION, linearLayoutManager.onSaveInstanceState())
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        savedInstanceState?.let {
+            linearLayoutManager.onRestoreInstanceState(savedInstanceState.getParcelable(KEY_RECYCLER_VIEW_POSITION))
+        }
     }
 
     override fun getLayoutId(): Int = R.layout.activity_latest_movies
@@ -69,9 +87,13 @@ class LatestMoviesActivity : BaseActivity<LatestMoviesViewModel>() {
     private fun setupMovieList() {
         listMovies?.apply {
             adapter = listAdapter
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = linearLayoutManager
             addItemDecoration(CustomItemSeparator(context, R.dimen.listItemSpace))
         }
+
+        swipeRefreshLayout.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
+            latestMoviesViewModel.refreshList()
+        })
     }
 
     private fun observeErrors() {
@@ -84,3 +106,5 @@ class LatestMoviesActivity : BaseActivity<LatestMoviesViewModel>() {
         toast("Click on ${movieModel.title}")
     }
 }
+
+private const val KEY_RECYCLER_VIEW_POSITION = "listPosition"
