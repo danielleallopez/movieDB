@@ -21,7 +21,9 @@
         </activity>
         <activity android:name=".ui.latestMovies.LatestMoviesActivity">
         </activity>
-        <activity android:name=".ui.movieDetails.MovieDetailsActivity">
+        <activity
+            android:name=".ui.movieDetails.MovieDetailsActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 
