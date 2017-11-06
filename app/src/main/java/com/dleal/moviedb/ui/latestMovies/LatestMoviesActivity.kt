@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView
 import com.dleal.moviedb.R
 import com.dleal.moviedb.ui.base.BaseActivity
 import com.dleal.moviedb.ui.base.CustomItemSeparator
+import com.dleal.moviedb.ui.movieDetails.MovieDetailsActivity
 import com.dleal.moviedb.util.Logger
 import com.dleal.moviedb.util.extensions.hide
 import com.dleal.moviedb.util.extensions.show
@@ -19,6 +20,7 @@ import com.dleal.moviedb.util.extensions.toast
 import com.dleal.moviedb.util.initCalendar
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.activity_latest_movies.*
+import kotlinx.android.synthetic.main.toolbar.*
 import java.util.Calendar
 import java.util.Calendar.DAY_OF_MONTH
 import java.util.Calendar.MONTH
@@ -43,6 +45,8 @@ class LatestMoviesActivity : BaseActivity<LatestMoviesViewModel>(), Logger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setSupportActionBar(mainToolbar)
+
         setupMovieList()
 
         observeErrorEvents()
@@ -65,6 +69,7 @@ class LatestMoviesActivity : BaseActivity<LatestMoviesViewModel>(), Logger {
                             progressMain.hide()
                             progressPage.hide()
                             listMovies.show()
+                            txtEmptyCase.hide()
                             swipeRefreshLayout.isRefreshing = false
                             listAdapter.movieList = data
                         }
@@ -132,7 +137,7 @@ class LatestMoviesActivity : BaseActivity<LatestMoviesViewModel>(), Logger {
     }
 
     private fun navigate(movieId: Int) {
-        toast("Click on $movieId")
+        MovieDetailsActivity.start(this, movieId)
     }
 
     private fun showDatePicker(movieFilterUiModel: MoviesFilterUiModel) {

@@ -3,6 +3,7 @@ package com.dleal.moviedb.data.movies
 import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -13,4 +14,8 @@ interface MoviesService {
     @GET("movie/now_playing")
     fun getNowPlaying(@Query("page") page: Int, @Query("language") language: String)
             : Single<Response<MovieCollectionDto>>
+
+    @GET("movie/{movie_id}")
+    fun getMovieDetails(@Path("movie_id") movieId: Int, @Query("language") language: String)
+            : Single<Response<MovieDetailsDto>>
 }

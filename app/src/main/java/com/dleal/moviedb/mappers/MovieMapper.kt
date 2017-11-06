@@ -2,10 +2,12 @@ package com.dleal.moviedb.mappers
 
 import com.dleal.moviedb.data.movies.DateRangeDto
 import com.dleal.moviedb.data.movies.MovieCollectionDto
+import com.dleal.moviedb.data.movies.MovieDetailsDto
 import com.dleal.moviedb.data.movies.MovieDto
 import com.dleal.moviedb.domain.movies.DateRange
 import com.dleal.moviedb.domain.movies.MovieCollection
 import com.dleal.moviedb.domain.movies.MovieCollectionPage
+import com.dleal.moviedb.domain.movies.MovieDetailsModel
 import com.dleal.moviedb.domain.movies.MovieModel
 import com.dleal.moviedb.util.parseStringToDate
 
@@ -60,3 +62,24 @@ fun validateMovieDto(movieDto: MovieDto) =
         movieDto.let {
             it.id != null && it.title != null && it.releaseDate != null
         }
+
+val movieDetailsMapper = { movieDetailsDto: MovieDetailsDto? ->
+    movieDetailsDto?.let {
+        MovieDetailsModel(
+                it.adult,
+                it.backdropPath,
+                it.budget,
+                it.homepage,
+                it.imdbId,
+                it.overview,
+                it.popularity,
+                it.posterPath,
+                it.releaseDate,
+                it.runtime,
+                it.tagline,
+                it.title,
+                it.voteAverage,
+                it.voteCount
+        )
+    } ?: MovieDetailsModel()
+}

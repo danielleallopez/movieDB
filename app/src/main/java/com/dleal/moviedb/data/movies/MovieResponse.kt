@@ -33,3 +33,20 @@ class DateRangeDto(
         @SerializedName("maximum") val maxDate: String,
         @SerializedName("minimum") val minDate: String
 )
+
+class MovieDetailsDto(
+        @SerializedName("adult") val adult: Boolean,
+        @SerializedName("backdrop_path") val backdropPath: String,
+        @SerializedName("budget") val budget: Long,
+        @SerializedName("website") val homepage: String,
+        @SerializedName("imdb_id") val imdbId: String,
+        @SerializedName("overview") val overview: String,
+        @SerializedName("popularity") val popularity: Float,
+        @SerializedName("poster_path") val posterPath: String,
+        @SerializedName("release_date") val releaseDate: String,
+        @SerializedName("runtime") val runtime: Int,
+        @SerializedName("tagLine") val tagline: String,
+        @SerializedName("title") val title: String,
+        @SerializedName("vote_average") val voteAverage: Float,
+        @SerializedName("vote_count") val voteCount: Int
+)

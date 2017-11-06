@@ -37,3 +37,20 @@ data class MovieCollectionPage(
         val totalPages: Int,
         val totalResults: Int
 )
+
+data class MovieDetailsModel(
+        val adult: Boolean = false,
+        val backdropPath: String? = null,
+        val budget: Long? = null,
+        val website: String? = null,
+        val imdbId: String? = null,
+        val overview: String? = null,
+        val popularity: Float? = null,
+        val posterPath: String? = null,
+        val releaseDate: String? = null,
+        val runtime: Int? = null,
+        val tagLine: String? = null,
+        val title: String = "",
+        val voteAverage: Float? = null,
+        val voteCount: Int? = null
+)
