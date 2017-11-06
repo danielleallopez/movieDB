@@ -12,8 +12,6 @@ abstract class BaseViewModel : ViewModel(), Logger {
 
     protected var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    abstract fun start()
-
     override fun onCleared() {
         super.onCleared()
 

@@ -33,10 +33,6 @@ class LatestMoviesViewModel(
 
     private var isLoadingMore = false
 
-    override fun start() {
-        loadPage()
-    }
-
     fun creationLatestMoviesEvents(): LiveData<LatestMoviesUiModel> = latestMoviesUiModel.apply {
         if (this.value == null) {
             loadPage(1)
@@ -60,7 +56,6 @@ class LatestMoviesViewModel(
     }
 
     private fun loadPage(page: Int = 1) {
-        logError("Loading page $page")
         currentPage = page
         addDisposable(
                 getLatestMoviesUseCase.fetchLatestMovies(page)

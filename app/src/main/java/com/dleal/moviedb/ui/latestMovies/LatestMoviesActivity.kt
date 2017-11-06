@@ -58,7 +58,6 @@ class LatestMoviesActivity : BaseActivity<LatestMoviesViewModel>(), Logger {
         latestMoviesViewModel.creationLatestMoviesEvents().observe(this, Observer {
             it?.let {
                 with(it) {
-                    logDebug(it.toString())
                     when {
                         mainLoading -> progressMain.show()
                         pageLoading -> progressPage.show()

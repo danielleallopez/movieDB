@@ -19,7 +19,7 @@ class SplashViewModel(
 
     val navigationEvents: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
-    override fun start() {
+    fun start() {
         addDisposable(Single.zip(
                 getConfigurationUseCase.fetchImagesConfiguration(), delay(EXPECTED_SPLASH_DELAY),
                 BiFunction { response: ImageServiceConfigModel, _: Boolean -> response })
