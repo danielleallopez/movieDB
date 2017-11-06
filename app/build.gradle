@@ -1,0 +1,130 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+apply from: "dependencies.gradle"
+apply from: "private.gradle"
+
+android {
+    compileSdkVersion 27
+
+    defaultConfig {
+        applicationId "com.dleal.moviedb"
+        minSdkVersion 16
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "boolean", "SHOW_HTTP_LOGS", "true"
+        }
+
+        release {
+            debuggable false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "boolean", "SHOW_HTTP_LOGS", "false"
+        }
+    }
+
+    flavorDimensions("environment")
+
+    productFlavors {
+        dev {
+            dimension "environment"
+            versionName defaultConfig.versionName + "-dev"
+            applicationId defaultConfig.applicationId + ".dev"
+            buildConfigField 'String', 'API_KEY', "${API_KEY_DEV}"
+            buildConfigField 'String', 'BASE_URL', '"https://api.themoviedb.org/3/"'
+        }
+
+        prod {
+            dimension "environment"
+            buildConfigField 'String', 'API_KEY', "${API_KEY_PROD}"
+            buildConfigField 'String', 'BASE_URL', '"https://api.themoviedb.org/3/"'
+        }
+    }
+
+    sourceSets {
+        //common test dir visible to unit and instrumentation tests
+        def commonTestDir = 'src/commonTest/java'
+        test {
+            java.srcDirs commonTestDir
+        }
+        androidTest {
+            java.srcDirs commonTestDir
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+    //Support
+    implementation "com.android.support:support-v4:${supportLibVersion}"
+    implementation "com.android.support:design:${supportLibVersion}"
+    implementation "com.android.support:support-compat:${supportLibVersion}"
+    implementation "com.android.support:appcompat-v7:${supportLibVersion}"
+    implementation "com.android.support:cardview-v7:${supportLibVersion}"
+    implementation "com.android.support:recyclerview-v7:${supportLibVersion}"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    //Architecture components
+    implementation "android.arch.lifecycle:extensions:$archComponentsVersion"
+    testImplementation "android.arch.core:core-testing:$archComponentsVersion"
+
+    // Dagger core
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+
+    // Dagger Android
+    implementation "com.google.dagger:dagger-android:$daggerVersion"
+    implementation("com.google.dagger:dagger-android-support:$daggerVersion") {
+        exclude group: "com.android.support", module: "support-v4"
+    }
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+
+    //Rx
+    implementation "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
+    implementation "io.reactivex.rxjava2:rxkotlin:2.1.0"
+    implementation "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}"
+
+    //OkHttp
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+
+    //Retrofit
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion") {
+        exclude module: 'okhttp'
+    }
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+
+    //Glide
+    implementation "com.github.bumptech.glide:glide:${glideVersion}"
+    kapt "com.github.bumptech.glide:compiler:${glideVersion}"
+
+    //Calendar picker
+    implementation('com.wdullaer:materialdatetimepicker:3.4.0') {
+        exclude group: 'com.android.support', module: 'support-v13'
+    }
+
+    //Test
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+    androidTestImplementation "org.mockito:mockito-android:${mockitoVersion}"
+    testImplementation 'com.nhaarman:mockito-kotlin:1.5.0'
+    testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+}
