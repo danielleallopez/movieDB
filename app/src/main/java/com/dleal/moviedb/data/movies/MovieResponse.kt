@@ -45,7 +45,7 @@ class MovieDetailsDto(
         @SerializedName("poster_path") val posterPath: String,
         @SerializedName("release_date") val releaseDate: String,
         @SerializedName("runtime") val runtime: Int,
-        @SerializedName("tagLine") val tagline: String,
+        @SerializedName("tagline") val tagLine: String,
         @SerializedName("title") val title: String,
         @SerializedName("vote_average") val voteAverage: Float,
         @SerializedName("vote_count") val voteCount: Int

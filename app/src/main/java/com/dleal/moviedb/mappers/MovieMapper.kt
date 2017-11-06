@@ -76,7 +76,7 @@ val movieDetailsMapper = { movieDetailsDto: MovieDetailsDto? ->
                 it.posterPath,
                 it.releaseDate,
                 it.runtime,
-                it.tagline,
+                it.tagLine,
                 it.title,
                 it.voteAverage,
                 it.voteCount

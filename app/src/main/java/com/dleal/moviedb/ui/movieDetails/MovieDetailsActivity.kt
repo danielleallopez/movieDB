@@ -91,9 +91,11 @@ class MovieDetailsActivity : BaseActivity<MovieDetailsViewModel>() {
     }
 
     private fun bindTagLine(tagLine: String?) {
-        tagLine?.let {
+        if (tagLine.isNullOrEmpty()) {
+            txtTagLine.hide()
+        } else {
             txtTagLine.text = tagLine
-        } ?: txtTagLine.hide()
+        }
     }
 
     private fun bindScore(voteAverage: Float?) {
